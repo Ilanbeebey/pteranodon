@@ -8,6 +8,6 @@ Pteranodon will support games, bots, web servers and a lot of useful things to h
 
 
 ## License
-Pteranodon® Copyright © 2022 - 2022 Beebey, Skyral and contributors.
+Pteranodon® Copyright © 2022 - 2022 [Beebey](https://github.com/Ilanbeebey), [Skyral](https://github.com/Skyral1) and contributors.
 
 Code released under the [MIT License](./LICENSE.md).
