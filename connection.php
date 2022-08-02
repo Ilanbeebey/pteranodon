@@ -22,6 +22,18 @@ if (session_status() == PHP_SESSION_NONE) {
 
 }
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    $db = new mysqli('localhost', 'pteranodon', 'ultrasafepass', 'pteranodon', NULL, '/run/mysqld/mysqld.sock');
+} catch(Exception $e) {
+
+    exit();
+
+    die('Erreur');
+
+}
+
 function check_login(){
 
     if (!empty($_SESSION['id']) AND !empty($_SESSION['username']) AND !empty($_SESSION['password'])) {
@@ -55,9 +67,10 @@ if (!isset($_SESSION['id']) AND !isset($_SESSION['password']) AND !empty($_COOKI
 
         $req = $db->prepare('SELECT * FROM users WHERE id = ? AND password = ?');
 
-        $req->execute(array($remember['id'], $remember['password']));
+        $req->bind_param("is", $remember['id'], $remember['password']);
+        $req->execute();
 
-        if ($req->rowCount() == 1) {
+        if ($req->num_rows == 1) {
 
             $r = $req->fetch();
 
@@ -69,6 +82,10 @@ if (!isset($_SESSION['id']) AND !isset($_SESSION['password']) AND !empty($_COOKI
 
             $_SESSION['password'] = $r['password'];
 
+        }
+        else
+        {
+            $req->free_result();
         }
 
     }
@@ -92,18 +109,6 @@ if (!empty($disconnect)) {
     header('Location: /login.php');
 
     exit();
-
-}
-
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-try {
-$db = new mysqli('localhost', 'pteranodon', 'ultrasafepass', 'pteranodon', NULL, '/run/mysqld/mysqld.sock');
-} catch(Exception $e) {
-
-    exit();
-
-    die('Erreur');
 
 }
 
